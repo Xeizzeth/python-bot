@@ -3,6 +3,8 @@ from loguru import logger as LOG
 
 from .base_bot import BaseBot
 
+from .managers import BaseManager
+
 """
 Information about your bot:
 
@@ -106,7 +108,6 @@ UnitUnderAttack
 UpgradeComplete
 VespeneExhausted
 WarpInComplete
-
 """
 
 class Bot(BaseBot):
@@ -119,10 +120,8 @@ class Bot(BaseBot):
     async def on_end(self, game_result):
         LOG.info(f"the game has ended {game_result}")
 
-    async def on_step(self, iteration: int):
-        if iteration == 0:
-            for worker in self.workers:
-                worker.attack(self.enemy_start_locations[0])
+    async def on_step(self, iteration):
+        pass
 
     async def on_building_construction_started(self, building):
         LOG.info(f"the building has started {building}")

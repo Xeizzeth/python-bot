@@ -16,7 +16,8 @@ def main():
     gen = sc2.main._host_game_iter(
         sc2.maps.get("CatalystLE_NOAI"),
         player_config,
-        realtime=False
+        realtime=False,
+        save_replay_as="replays/replay.SC2Replay"
     )
 
     next(gen)
