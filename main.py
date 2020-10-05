@@ -1,5 +1,4 @@
 from importlib import reload, invalidate_caches
-from time import sleep
 
 import sc2
 from sc2 import Race, Difficulty
