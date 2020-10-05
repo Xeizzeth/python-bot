@@ -1,4 +1,8 @@
+import logging
+
 from .base_bot import BaseBot
+
+LOG = logging.getLogger()
 
 """
 Information about your bot:
@@ -79,6 +83,30 @@ self.time_formatted: str # The current game time properly formatted in 'min:sec'
 
 +++
 
+Alert codes:
+
+AlertError
+AddOnComplete
+BuildingComplete
+BuildingUnderAttack
+LarvaHatched
+MergeComplete
+MineralsExhausted
+MorphComplete
+MothershipComplete
+MULEExpired
+NuclearLaunchDetected
+NukeComplete
+NydusWormDetected
+ResearchComplete
+TrainError
+TrainUnitComplete
+TrainWorkerComplete
+TransformationComplete
+UnitUnderAttack
+UpgradeComplete
+VespeneExhausted
+WarpInComplete
 
 """
 
