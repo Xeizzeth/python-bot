@@ -1,8 +1,7 @@
-import logging
+import sys
+from loguru import logger as LOG
 
 from .base_bot import BaseBot
-
-LOG = logging.getLogger()
 
 """
 Information about your bot:
@@ -112,13 +111,13 @@ WarpInComplete
 
 class Bot(BaseBot):
     async def on_before_start(self):
-        print("Init")
+        LOG.info(f"init")
 
     async def on_start(self):
-        print("the game has started")
+        LOG.info(f"the game has started")
 
     async def on_end(self, game_result):
-        print("The game has ended", game_result)
+        LOG.info(f"the game has ended {game_result}")
 
     async def on_step(self, iteration: int):
         if iteration == 0:
@@ -126,28 +125,28 @@ class Bot(BaseBot):
                 worker.attack(self.enemy_start_locations[0])
 
     async def on_building_construction_started(self, building):
-        print("the building has started", building)
+        LOG.info(f"the building has started {building}")
 
     async def on_building_construction_complete(self, building):
-        print("the building completed", building)
+        LOG.info(f"the building completed {building}")
 
     async def on_upgrade_complete(self, upgrade):
-        print("upgrade complete", upgrade)
+        LOG.info(f"upgrade complete {upgrade}")
 
     async def on_unit_created(self, unit):
-        print("unit created", unit)
+        LOG.info(f"unit created {unit}")
 
     async def on_unit_destroyed(self, unit_tag):
-        print("unit destroyed", unit_tag)
+        LOG.info(f"unit destroyed {unit_tag}")
 
     async def on_unit_took_damage(self, damage_amount):
-        print("unit got damaged", damage_amount)
+        LOG.info(f"unit got damaged {damage_amount}")
 
     async def on_enemy_unit_entered_vision(self, unit):
-        print("unit became visible", unit)
+        LOG.info(f"unit became visible {unit}")
 
     async def on_enemy_unit_left_vision(self, unit_tag):
-        print("unit left vision", unit_tag)
+        LOG.info(f"unit left vision {unit_tag}")
 
     async def on_unit_type_changed(self, unit, previous_type):
-        print("unit changed type", unit, previous_type)
+        LOG.info(f"unit changed type, {unit}, {previous_type}")
