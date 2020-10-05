@@ -3,7 +3,8 @@ from loguru import logger as LOG
 
 from .base_bot import BaseBot
 
-from .managers import BaseManager
+from .managers import MacroManager
+from .wrappers import SCV
 
 """
 Information about your bot:
@@ -115,6 +116,11 @@ class Bot(BaseBot):
         LOG.info(f"init")
 
     async def on_start(self):
+        self.macro_manager = MacroManager(
+            self.expansion_locations,
+            self.workers,
+            self.townhalls
+        )
         LOG.info(f"the game has started")
 
     async def on_end(self, game_result):

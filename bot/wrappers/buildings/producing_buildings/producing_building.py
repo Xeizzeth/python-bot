@@ -1,4 +1,4 @@
-from wrappers.buildings.building import Building
+from bot.wrappers.buildings.building import Building
 
 
 class ProducingBuilding(Building):

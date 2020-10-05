@@ -1,4 +1,4 @@
-from wrappers.base_wrapper import BaseWrapper
+from bot.wrappers.base_wrapper import BaseWrapper
 
 
 class AttackUnit(BaseWrapper):

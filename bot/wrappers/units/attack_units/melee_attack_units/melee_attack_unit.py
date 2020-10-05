@@ -1,4 +1,4 @@
-from wrappers.units.attack_units.attack_unit import AttackUnit
+from bot.wrappers.units.attack_units.attack_unit import AttackUnit
 
 
 class MeleeAttackUnit(AttackUnit):
