@@ -1,2 +1,2 @@
-from .base_manager import BaseManager
+from .mining_manager import MiningManager
 from .macro_manager import MacroManager
