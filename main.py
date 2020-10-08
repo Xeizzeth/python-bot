@@ -1,10 +1,46 @@
+import sys
+from collections import defaultdict
+from random import choice
 from importlib import reload, invalidate_caches
+
+from loguru import logger as LOG
 
 import sc2
 from sc2 import Race, Difficulty
 from sc2.player import Bot, Computer
 
 from bot import bot
+
+
+colors = [
+    "blue", "cyan", "green", "magenta", "red", "yellow",
+    "light-blue", "light-cyan", "light-green", "light-magenta",
+    "light-red", "light-yellow"
+]
+module_colors = defaultdict(lambda: choice(colors))
+
+level_colors = {
+    "TRACE": "white",
+    "DEBUG": "magenta",
+    "INFO": "green",
+    "SUCCESS": "blue",
+    "WARNING": "yellow",
+    "ERROR": "red",
+    "CRITICAL": "red",
+}
+
+
+def formatter(record):
+    if not record["exception"] and not record["name"].startswith("bot."):
+        return ""
+    module_color = module_colors[record["name"]]
+    level_color = level_colors[record["level"].name]
+    return "<" + module_color + ">[{time:HH:mm:ss.SSS}][{name}]</><" + \
+        level_color + ">[{level}]</> <bold>{message}</>\n{exception}"
+
+
+LOG.remove()
+LOG.add(sys.stdout, format=formatter, level="DEBUG")
 
 
 def main():

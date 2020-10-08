@@ -10,6 +10,7 @@ class MiningManager():
         geysers=None,
         workers=None,
     ):
+        LOG.debug("hello world from mining manager")
         self.position = position
         self.raw_data = raw_data
 

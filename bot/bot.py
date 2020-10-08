@@ -1,10 +1,8 @@
-import sys
 from loguru import logger as LOG
 
 from .base_bot import BaseBot
-
 from .managers import MacroManager
-from .wrappers import SCV
+from .wrappers import Scv
 
 """
 Information about your bot:
@@ -117,7 +115,7 @@ class Bot(BaseBot):
 
     async def on_start(self):
         self.macro_manager = MacroManager(
-            self.expansion_locations,
+            self.expansion_locations_dict,
             self.workers,
             self.townhalls
         )
@@ -144,8 +142,8 @@ class Bot(BaseBot):
     async def on_unit_destroyed(self, unit_tag):
         LOG.info(f"unit destroyed {unit_tag}")
 
-    async def on_unit_took_damage(self, damage_amount):
-        LOG.info(f"unit got damaged {damage_amount}")
+    async def on_unit_took_damage(self, unit, damage_amount):
+        LOG.info(f"unit got damaged {unit} {damage_amount}")
 
     async def on_enemy_unit_entered_vision(self, unit):
         LOG.info(f"unit became visible {unit}")
