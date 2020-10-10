@@ -115,17 +115,19 @@ class Bot(BaseBot):
 
     async def on_start(self):
         self.macro_manager = MacroManager(
+            self,
             self.expansion_locations_dict,
             self.workers,
             self.townhalls
         )
         LOG.info(f"the game has started")
+        self.managers.append(self.macro_manager)
 
     async def on_end(self, game_result):
         LOG.info(f"the game has ended {game_result}")
 
     async def on_step(self, iteration):
-        pass
+        await self.update()
 
     async def on_building_construction_started(self, building):
         LOG.info(f"the building has started {building}")

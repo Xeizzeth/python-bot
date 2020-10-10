@@ -3,6 +3,7 @@ from loguru import logger as LOG
 class MiningManager():
     def __init__(
         self,
+        bot,
         position,
         raw_data,
         townhall=None,
@@ -10,7 +11,8 @@ class MiningManager():
         geysers=None,
         workers=None,
     ):
-        LOG.debug("hello world from mining manager")
+        self.bot = bot
+
         self.position = position
         self.raw_data = raw_data
 
@@ -24,4 +26,8 @@ class MiningManager():
         self.mineral_workers = list()
         self.gas_workers = list()
 
-        pass
+    async def update(self):
+        await self.draw_debug_info()
+
+    async def draw_debug_info(self):
+        self.bot.draw_sphere(self.position, 2.5)

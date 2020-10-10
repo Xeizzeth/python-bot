@@ -17,6 +17,7 @@ colors = [
     "light-blue", "light-cyan", "light-green", "light-magenta",
     "light-red", "light-yellow"
 ]
+
 module_colors = defaultdict(lambda: choice(colors))
 
 level_colors = {
@@ -31,16 +32,22 @@ level_colors = {
 
 
 def formatter(record):
-    if not record["exception"] and not record["name"].startswith("bot."):
-        return ""
     module_color = module_colors[record["name"]]
     level_color = level_colors[record["level"].name]
     return "<" + module_color + ">[{time:HH:mm:ss.SSS}][{name}]</><" + \
         level_color + ">[{level}]</> <bold>{message}</>\n{exception}"
 
 
+logger_filter = {
+    "": False,  # By default, disable all
+    "bot": "DEBUG",
+    "sc2": "INFO",
+    "my_module.child": "WARNING",
+}
+
+
 LOG.remove()
-LOG.add(sys.stdout, format=formatter, level="DEBUG")
+LOG.add(sys.stdout, format=formatter, filter=logger_filter, level="DEBUG")
 
 
 def main():
