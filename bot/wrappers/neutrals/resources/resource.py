@@ -1,6 +1,6 @@
-from bot.wrappers.buildings.building import Building
+from bot.wrappers.base_wrapper import BaseWrapper
 
 
-class DefenceBuilding(Building):
+class Resource(BaseWrapper):
     def __init__(self, *args, **kwargs):
          super().__init__(self, *args, **kwargs)

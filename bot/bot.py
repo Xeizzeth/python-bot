@@ -116,12 +116,12 @@ class Bot(BaseBot):
     async def on_start(self):
         self.macro_manager = MacroManager(
             self,
-            self.expansion_locations_dict,
-            self.workers,
-            self.townhalls
+            await self.get_expansions(self.expansion_locations_dict),
+            self.workers.tags,
+            self.townhalls.tags
         )
         LOG.info(f"the game has started")
-        self.managers.append(self.macro_manager)
+        # self.managers.append(self.macro_manager)
 
     async def on_end(self, game_result):
         LOG.info(f"the game has ended {game_result}")

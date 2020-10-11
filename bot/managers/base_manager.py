@@ -1,10 +1,9 @@
 import weakref
 
-class BaseWrapper:
+class BaseManager():
     _instances = set()
 
-    def __init__(self, tag):
-        self.tag = tag
+    def __init__(self):
         self._instances.add(weakref.ref(self))
 
     @classmethod

@@ -1,11 +1,24 @@
 import sc2
 
+from bot.managers.base_manager import BaseManager
+from bot.wrappers.base_wrapper import BaseWrapper
+
 class BaseBot(sc2.BotAI):
-    managers = list()
+    # managers = list()
 
     async def update(self):
-        for manager in self.managers:
-            await manager.update()
+        await BaseManager.update_subclasses()
+        await BaseWrapper.update_subclasses()
+
+    async def get_expansions(self, locations):
+        location_dict = dict()
+        for position, location_data in locations.items():
+            location_dict[position] = {
+                "mineral_tags": location_data.mineral_field.tags,
+                "vespene_tags": location_data.vespene_geyser.tags
+            }
+
+        return location_dict
 
     async def chat(self, message):
         await self.client.chat_send(message, False)
