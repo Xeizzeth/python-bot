@@ -7,7 +7,6 @@ class Mineral(Resource):
     id = UnitTypeId.MINERALFIELD
 
     def __init__(self, bot, *args, **kwargs):
-        self._update_source = bot.mineral_field
         super().__init__(bot=bot, *args, **kwargs)
 
     @property

@@ -7,7 +7,8 @@ from sc2.ids.unit_typeid import UnitTypeId
 from .base_manager import BaseManager
 
 from bot.wrappers import (
-   Mineral, Vespene
+   Mineral, Vespene,
+   CommandCenter
 )
 
 from random import randint
@@ -33,6 +34,7 @@ class MiningManager(BaseManager):
         self.raw_data = raw_data
 
         self.townhall_tag = townhall_tag if townhall_tag else None
+        self.set_townhall(townhall_tag)
 
         self.mineral_tags = mineral_tags if mineral_tags else set()
         self.vespene_tags = vespene_tags if vespene_tags else set()
@@ -51,6 +53,20 @@ class MiningManager(BaseManager):
 
         for vespene_tag in self.vespene_tags:
             self.vespenes[vespene_tag] = Vespene(tag=vespene_tag, bot=self.bot)
+
+    def set_townhall(self, townhall_tag):
+        if townhall_tag:
+            townhall_unit_unwrapped = self.bot.townhalls.by_tag(townhall_tag)
+            if townhall_unit_unwrapped.type_id in (
+                UnitTypeId.COMMANDCENTER,
+                UnitTypeId.PLANETARYFORTRESS,
+                UnitTypeId.ORBITALCOMMAND,
+                UnitTypeId.COMMANDCENTERFLYING,
+                UnitTypeId.ORBITALCOMMANDFLYING
+            ):
+                self.townhall = CommandCenter(tag=townhall_tag, bot=self.bot)
+        else:
+            self.townhall = None
 
     def remove_unit(self, unit):
         if unit.id == UnitTypeId.MINERALFIELD:

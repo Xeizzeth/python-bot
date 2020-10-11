@@ -1,26 +1,74 @@
 from loguru import logger as LOG
 
-from .base_manager import BaseManager
+from sc2.ids.unit_typeid import UnitTypeId
 
+from .base_manager import BaseManager
 from .mining_manager import MiningManager
 
+from bot.wrappers.buildings import (
+    CommandCenter,
+    # Nexus # TODO: NOT IMPLEMENTED YET
+    # Hatchery # TODO: NOT IMPLEMENTED YET
+)
+from bot.wrappers.units import (
+    Scv,
+    # Probe # TODO: NOT IMPLEMENTED YET
+    # Drone # TODO: NOT IMPLEMENTED YET
+)
+
 class MacroManager(BaseManager):
-    def __init__(self, bot, locations, available_scvs, available_townhalls):
+    def __init__(
+        self,
+        bot,
+        locations=None,
+        worker_tags=None,
+        townhall_tags=None
+    ):
         super().__init__()
         LOG.info(f"Initializing macromanager for {len(locations)} locations")
 
         self.bot = bot
         self.mining_managers = list()
 
-        for position, location_data in locations.items():
-            new_mining_manager = MiningManager(
-                bot=self.bot,
-                position=position,
-                raw_data=location_data,
-                mineral_tags=location_data["mineral_tags"],
-                vespene_tags=location_data["vespene_tags"]
-            )
-            self.mining_managers.append(new_mining_manager)
+        if locations:
+            for position, location_data in locations.items():
+                # TODO: TO WORK ONLY WITH MAIN BASE FOR NOW:
+                townhall = self.bot.townhalls.by_tag(list(townhall_tags)[0])
+                if townhall.position == position:
+                    new_mining_manager = MiningManager(
+                        bot=self.bot,
+                        position=position,
+                        raw_data=location_data,
+                        mineral_tags=location_data["mineral_tags"],
+                        vespene_tags=location_data["vespene_tags"]
+                    )
+                    self.mining_managers.append(new_mining_manager)
+
+        available_workers = set()
+        for worker_tag in worker_tags:
+            worker_unit_unwrapped = self.bot.workers.by_tag(worker_tag)
+            if worker_unit_unwrapped.type_id == UnitTypeId.SCV:
+                available_workers.add(Scv(tag=worker_tag, bot=self.bot))
+
+        owned_exps = set(
+            (loc, th.tag) for loc, th in self.bot.owned_expansions.items()
+        )
+
+        for exp in owned_exps:
+            exp_loc, exp_th = exp
+            exp_distances = list()
+            free_mining_mgrs = [
+                mgr for mgr
+                in self.mining_managers
+                if mgr.townhall == None
+            ]
+            for mining_mgr in free_mining_mgrs:
+                distance = self.bot.distance_math_hypot(
+                    exp_loc, mining_mgr.position
+                )
+                exp_distances.append({"dist": distance, "mgr": mining_mgr})
+            closest_mm = min(exp_distances, key=lambda x: x["dist"])
+            closest_mm["mgr"].set_townhall(exp_th)
 
     async def update(self):
         pass
