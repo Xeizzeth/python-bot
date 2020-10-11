@@ -6,6 +6,10 @@ from bot.wrappers.base_wrapper import BaseWrapper
 class BaseBot(sc2.BotAI):
     # managers = list()
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.unit_command_uses_self_do = True
+
     async def update(self):
         await BaseWrapper.update_subclasses()
         await BaseManager.update_subclasses()
