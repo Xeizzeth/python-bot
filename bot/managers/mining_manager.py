@@ -2,6 +2,8 @@ from collections import defaultdict
 
 from loguru import logger as LOG
 
+from sc2.ids.unit_typeid import UnitTypeId
+
 from .base_manager import BaseManager
 
 from bot.wrappers import (
@@ -21,6 +23,8 @@ class MiningManager(BaseManager):
         vespene_tags=None,
         worker_tags=None,
     ):
+        super().__init__()
+
         self.randint = randint(0, 100000)
 
         self.bot = bot
@@ -42,23 +46,23 @@ class MiningManager(BaseManager):
         self.vespene_workers = dict()
         self.undistributed_workers = dict()
 
-        self.update_tags()
+        for mineral_tag in self.mineral_tags:
+            self.minerals[mineral_tag] = Mineral(tag=mineral_tag, bot=self.bot)
 
-        super().__init__()
+        for vespene_tag in self.vespene_tags:
+            self.vespenes[vespene_tag] = Vespene(tag=vespene_tag, bot=self.bot)
 
-    def update_tags(self):
-        for tag in self.mineral_tags:
-            mineral = self.bot.mineral_field.by_tag(tag)
-            if mineral.is_visible:
-                self.minerals[tag] = mineral
-
-        for tag in self.vespene_tags:
-            vespene = self.bot.vespene_geyser.by_tag(tag)
-            if vespene.is_visible:
-                self.vespenes[tag] = vespene
+    def remove_unit(self, unit):
+        if unit.id == UnitTypeId.MINERALFIELD:
+            if unit.tag in self.minerals:
+                LOG.info(f"Removing {unit.tag} from MINERALS")
+                self.minerals.pop(unit.tag)
+        elif unit.id == UnitTypeId.VESPENEGEYSER:
+            if unit.tag in self.vespenes:
+                LOG.info(f"Removing {unit.tag} from VESPENES")
+                self.vespenes.pop(unit.tag)
 
     async def update(self):
-        self.update_tags()
         await self.draw_debug_info()
 
     async def draw_debug_info(self):
@@ -80,7 +84,7 @@ class MiningManager(BaseManager):
         self.bot.draw_text_info(entries, self.position)
 
         for mineral in self.minerals.values():
-            amount = mineral.mineral_contents
+            amount = mineral.minerals_left
             workers = 0
 
             mineral_entries = (
@@ -100,7 +104,7 @@ class MiningManager(BaseManager):
             )
 
         for vespene in self.vespenes.values():
-            amount = vespene.vespene_contents
+            amount = vespene.vespene_left
             workers = 0
 
             vespene_entries = (

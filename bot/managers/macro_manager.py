@@ -6,6 +6,7 @@ from .mining_manager import MiningManager
 
 class MacroManager(BaseManager):
     def __init__(self, bot, locations, available_scvs, available_townhalls):
+        super().__init__()
         LOG.info(f"Initializing macromanager for {len(locations)} locations")
 
         self.bot = bot
@@ -21,8 +22,8 @@ class MacroManager(BaseManager):
             )
             self.mining_managers.append(new_mining_manager)
 
-        super().__init__()
-
     async def update(self):
         pass
-        # print("i'm updating, macro manager")
+
+    def remove_unit(self, unit):
+        pass

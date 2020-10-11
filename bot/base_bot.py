@@ -7,8 +7,8 @@ class BaseBot(sc2.BotAI):
     # managers = list()
 
     async def update(self):
-        await BaseManager.update_subclasses()
         await BaseWrapper.update_subclasses()
+        await BaseManager.update_subclasses()
 
     async def get_expansions(self, locations):
         location_dict = dict()
@@ -29,7 +29,7 @@ class BaseBot(sc2.BotAI):
         elif isinstance(point, sc2.position.Point2):
             x, y, z = (*point, self.get_terrain_z_height(point))
         else:
-            raise NotImplementedError("Not implemented for this type")
+            raise NotImplementedError("get_xyz not implemented for this type")
 
         return (x, y, z)
 
