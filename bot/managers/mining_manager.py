@@ -55,12 +55,63 @@ class MiningManager(BaseManager):
     def remove_unit(self, unit):
         if unit.id == UnitTypeId.MINERALFIELD:
             if unit.tag in self.minerals:
-                LOG.info(f"Removing {unit.tag} from MINERALS")
-                self.minerals.pop(unit.tag)
+                self.update_minerals()
         elif unit.id == UnitTypeId.VESPENEGEYSER:
             if unit.tag in self.vespenes:
-                LOG.info(f"Removing {unit.tag} from VESPENES")
-                self.vespenes.pop(unit.tag)
+                self.update_vespenes()
+
+    def update_minerals(self):
+        location_info = self.bot.expansion_locations_dict[self.position]
+        location_mineral_tags = location_info.mineral_field.tags
+
+        new_mineral_tags = location_mineral_tags - self.mineral_tags
+        destroyed_mineral_tags = self.mineral_tags - location_mineral_tags
+
+        self.mineral_tags = location_mineral_tags
+
+        for mineral_tag in destroyed_mineral_tags:
+            LOG.debug(
+                f"Removing {mineral_tag} "
+                + f"position: {self.minerals[mineral_tag].position} "
+                + "from MINERALS"
+            )
+            self.minerals.pop(mineral_tag)
+
+        for mineral_tag in new_mineral_tags:
+            self.minerals[mineral_tag] = Mineral(tag=mineral_tag, bot=self.bot)
+
+            LOG.debug(
+                f"Added {mineral_tag} "
+                + f"position: {self.minerals[mineral_tag].position} "
+                + "to MINERALS"
+            )
+
+    def update_vespenes(self):
+        location_info = self.bot.expansion_locations_dict[self.position]
+        location_vespene_tags = location_info.vespene_geyser.tags
+
+        new_vespene_tags = location_vespene_tags - self.vespene_tags
+        destroyed_vespene_tags = self.vespene_tags - location_vespene_tags
+
+        self.vespene_tags = location_vespene_tags
+
+        for vespene_tag in destroyed_vespene_tags:
+            LOG.debug(
+                f"Removing {vespene_tag} "
+                + f"position: {self.vespenes[vespene_tag].position} "
+                + "from VESPENES"
+            )
+
+            self.vespenes.pop(vespene_tag)
+
+        for vespene_tag in new_vespene_tags:
+            self.vespenes[vespene_tag] = Vespene(tag=vespene_tag, bot=self.bot)
+
+            LOG.debug(
+                f"Added {vespene_tag} "
+                + f"position: {self.vespenes[vespene_tag].position} "
+                + "to VESPENES"
+            )
 
     async def update(self):
         await self.draw_debug_info()

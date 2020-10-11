@@ -10,5 +10,6 @@ class Mineral(Resource):
         self._update_source = bot.mineral_field
         super().__init__(bot=bot, *args, **kwargs)
 
-    async def update(self):
-        self.minerals_left = self._unit.mineral_contents
+    @property
+    def minerals_left(self):
+        return self._unit.mineral_contents

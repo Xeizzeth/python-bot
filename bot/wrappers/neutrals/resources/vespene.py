@@ -10,5 +10,6 @@ class Vespene(Resource):
         self._update_source = bot.vespene_geyser
         super().__init__(bot=bot, *args, **kwargs)
 
-    async def update(self):
-        self.vespene_left = self._unit.vespene_contents
+    @property
+    def vespene_left(self):
+        return self._unit.vespene_contents
