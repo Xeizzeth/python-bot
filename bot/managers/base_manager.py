@@ -13,7 +13,7 @@ class BaseManager():
                 cls._instances.remove(manager)
 
     @classmethod
-    def unit_died(cls, unit):
+    def unit_destroyed(cls, unit):
         for manager in cls._instances:
             if manager is not None:
                 manager.remove_unit(unit)

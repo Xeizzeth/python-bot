@@ -18,7 +18,7 @@ class BaseWrapper:
                 await unit.update()
             else:
                 cls._instances.remove(unit)
-                BaseManager.unit_died(unit)
+                BaseManager.unit_destroyed(unit)
 
     @property
     def position(self):
