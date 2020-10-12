@@ -44,12 +44,6 @@ class MacroManager(BaseManager):
                     )
                     self.mining_managers.append(new_mining_manager)
 
-        available_workers = set()
-        for worker_tag in worker_tags:
-            worker_unit_unwrapped = self.bot.workers.by_tag(worker_tag)
-            if worker_unit_unwrapped.type_id == UnitTypeId.SCV:
-                available_workers.add(Scv(tag=worker_tag, bot=self.bot))
-
         owned_exps = set(
             (loc, th.tag) for loc, th in self.bot.owned_expansions.items()
         )
@@ -69,6 +63,22 @@ class MacroManager(BaseManager):
                 exp_distances.append({"dist": distance, "mgr": mining_mgr})
             closest_mm = min(exp_distances, key=lambda x: x["dist"])
             closest_mm["mgr"].set_townhall(exp_th)
+
+        for mining_mgr in self.mining_managers:
+            if not worker_tags:
+                break
+            if mining_mgr.townhall:
+                required_workers = mining_mgr.required_workers_total
+                if not required_workers >= len(worker_tags):
+                    popped_workers = {
+                        worker_tags.pop() for _ in range(required_workers)
+                    }
+                else:
+                    popped_workers = worker_tags
+                    worker_tags = set()
+                mining_mgr.set_workers(popped_workers)
+
+        self.unused_workers = worker_tags if worker_tags else None
 
     async def update(self):
         pass

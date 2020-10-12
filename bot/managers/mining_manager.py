@@ -8,7 +8,8 @@ from .base_manager import BaseManager
 
 from bot.wrappers import (
    Mineral, Vespene,
-   CommandCenter
+   CommandCenter,
+   Scv
 )
 
 from random import randint
@@ -54,6 +55,8 @@ class MiningManager(BaseManager):
         for vespene_tag in self.vespene_tags:
             self.vespenes[vespene_tag] = Vespene(tag=vespene_tag, bot=self.bot)
 
+        self.recalculate_workers()
+
     def set_townhall(self, townhall_tag):
         if townhall_tag:
             townhall_unit_unwrapped = self.bot.townhalls.by_tag(townhall_tag)
@@ -68,6 +71,45 @@ class MiningManager(BaseManager):
         else:
             self.townhall = None
 
+    def set_workers(self, worker_tags):
+        for worker_tag in worker_tags:
+            worker_unit_unwrapped = self.bot.workers.by_tag(worker_tag)
+            if worker_unit_unwrapped.type_id == UnitTypeId.SCV:
+                self.undistributed_workers[worker_tag] =\
+                    Scv(tag=worker_tag, bot=self.bot)
+            # TODO: Add other worker types
+
+        self.recalculate_workers()
+
+    def recalculate_workers(self):
+        self.required_workers_total = (
+            (len(self.minerals) * 2)
+            # TODO: Commented until I start working with vespene
+            # + (len(self.vespenes) * 3)
+        )
+
+        self.required_mineral_workers_total = (
+            len(self.minerals) * 2
+        )
+
+        self.required_vespene_workers_total = (
+            len(self.vespenes) * 3
+        )
+
+        self.undistributed_workers = {
+            **self.mineral_workers,
+            **self.vespene_workers,
+            **self.undistributed_workers
+        }
+
+        self.mineral_workers = dict()
+        self.vespene_workers = dict()
+
+        self.needed_workers = (
+            self.required_workers_total
+            - len(self.undistributed_workers)
+        )
+
     def remove_unit(self, unit):
         if unit.id == UnitTypeId.MINERALFIELD:
             if unit.tag in self.minerals:
@@ -75,6 +117,7 @@ class MiningManager(BaseManager):
         elif unit.id == UnitTypeId.VESPENEGEYSER:
             if unit.tag in self.vespenes:
                 self.update_vespenes()
+        self.recalculate_workers()
 
     def update_minerals(self):
         location_info = self.bot.expansion_locations_dict[self.position]
