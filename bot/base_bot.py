@@ -9,6 +9,7 @@ class BaseBot(sc2.BotAI):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.unit_command_uses_self_do = True
+        self.raw_affects_selection = True
 
     async def update(self):
         await BaseWrapper.update_subclasses()
