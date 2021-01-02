@@ -51,10 +51,10 @@ class MiningManager(BaseManager):
         self.undistributed_workers = dict()
 
         for mineral_tag in self.mineral_tags:
-            self.minerals[mineral_tag] = Mineral(tag=mineral_tag, bot=self.bot)
+            self.minerals[mineral_tag] = Mineral(tag=mineral_tag)
 
         for vespene_tag in self.vespene_tags:
-            self.vespenes[vespene_tag] = Vespene(tag=vespene_tag, bot=self.bot)
+            self.vespenes[vespene_tag] = Vespene(tag=vespene_tag)
 
         self.recalculate_workers()
 
@@ -68,7 +68,7 @@ class MiningManager(BaseManager):
                 UnitTypeId.COMMANDCENTERFLYING,
                 UnitTypeId.ORBITALCOMMANDFLYING
             ):
-                self.townhall = CommandCenter(tag=townhall_tag, bot=self.bot)
+                self.townhall = CommandCenter(tag=townhall_tag)
         else:
             self.townhall = None
 
@@ -76,8 +76,7 @@ class MiningManager(BaseManager):
         for worker_tag in worker_tags:
             worker_unit_unwrapped = self.bot.workers.by_tag(worker_tag)
             if worker_unit_unwrapped.type_id == UnitTypeId.SCV:
-                self.undistributed_workers[worker_tag] =\
-                    Scv(tag=worker_tag, bot=self.bot)
+                self.undistributed_workers[worker_tag] = Scv(tag=worker_tag)
             # TODO: Add other worker types
 
         self.recalculate_workers()
@@ -138,7 +137,7 @@ class MiningManager(BaseManager):
             self.minerals.pop(mineral_tag)
 
         for mineral_tag in new_mineral_tags:
-            self.minerals[mineral_tag] = Mineral(tag=mineral_tag, bot=self.bot)
+            self.minerals[mineral_tag] = Mineral(tag=mineral_tag)
 
             log.debug(
                 f"Added {mineral_tag} "
@@ -165,7 +164,7 @@ class MiningManager(BaseManager):
             self.vespenes.pop(vespene_tag)
 
         for vespene_tag in new_vespene_tags:
-            self.vespenes[vespene_tag] = Vespene(tag=vespene_tag, bot=self.bot)
+            self.vespenes[vespene_tag] = Vespene(tag=vespene_tag)
 
             log.debug(
                 f"Added {vespene_tag} "

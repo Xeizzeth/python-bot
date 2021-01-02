@@ -22,17 +22,17 @@ class Wrappers(type):
 
 class BaseWrapper(object, metaclass=Wrappers):
     _instances = set()
+    _bot = None
 
-    def __init__(self, tag, bot):
+    def __init__(self, tag):
         self.tag = tag
-        self.bot = bot
         self._instances.add(self)
-        self._unit = self.bot.all_units.by_tag(self.tag)
+        self._unit = self._bot.all_units.by_tag(self.tag)
 
     @classmethod
     async def update_subclasses(cls):
         for unit in cls._instances.copy():
-            if unit is not None and unit.tag in unit.bot.all_units.tags:
+            if unit is not None and unit.tag in unit._bot.all_units.tags:
                 unit.update_unit()
                 await unit.update()
             else:
@@ -44,7 +44,7 @@ class BaseWrapper(object, metaclass=Wrappers):
         return self._unit.position
 
     def update_unit(self):
-        self._unit = self.bot.all_units.by_tag(self.tag)
+        self._unit = self._bot.all_units.by_tag(self.tag)
 
     async def update(self):
         pass

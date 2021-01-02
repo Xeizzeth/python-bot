@@ -6,8 +6,8 @@ from .resource import Resource
 class Mineral(Resource):
     type_id = UnitTypeId.MINERALFIELD
 
-    def __init__(self, bot, *args, **kwargs):
-        super().__init__(bot=bot, *args, **kwargs)
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
     @property
     def minerals_left(self):

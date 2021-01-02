@@ -2,14 +2,16 @@ import sc2
 
 from bot.managers.base_manager import BaseManager
 from bot.wrappers.base_wrapper import BaseWrapper
+from bot.wrappers import Wrappers
+
 
 class BaseBot(sc2.BotAI):
     # managers = list()
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.unit_command_uses_self_do = True
         self.raw_affects_selection = True
+        Wrappers.set_bot_instance(self)
 
     async def update(self):
         await BaseWrapper.update_subclasses()
