@@ -4,7 +4,7 @@ from .resource import Resource
 
 
 class Mineral(Resource):
-    id = UnitTypeId.MINERALFIELD
+    type_id = UnitTypeId.MINERALFIELD
 
     def __init__(self, bot, *args, **kwargs):
         super().__init__(bot=bot, *args, **kwargs)

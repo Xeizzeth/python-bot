@@ -9,7 +9,8 @@ from .base_manager import BaseManager
 from bot.wrappers import (
    Mineral, Vespene,
    CommandCenter,
-   Scv
+   Scv,
+   Wrappers
 )
 
 from random import randint
@@ -111,10 +112,10 @@ class MiningManager(BaseManager):
         )
 
     def remove_unit(self, unit):
-        if unit.id == UnitTypeId.MINERALFIELD:
+        if unit.type_id == UnitTypeId.MINERALFIELD:
             if unit.tag in self.minerals:
                 self.update_minerals()
-        elif unit.id == UnitTypeId.VESPENEGEYSER:
+        elif unit.type_id == UnitTypeId.VESPENEGEYSER:
             if unit.tag in self.vespenes:
                 self.update_vespenes()
         self.recalculate_workers()

@@ -4,7 +4,7 @@ from .producing_building import ProducingBuilding
 
 
 class CommandCenter(ProducingBuilding):
-    id = UnitTypeId.COMMANDCENTER
+    type_id = UnitTypeId.COMMANDCENTER
 
     def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)

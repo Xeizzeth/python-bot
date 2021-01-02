@@ -2,7 +2,25 @@ from loguru import logger as log
 
 from bot.managers.base_manager import BaseManager
 
-class BaseWrapper:
+
+class Wrappers(type):
+    _wrappers = {}
+
+    def __new__(mcs, name, bases, dct):
+        wrapper = type.__new__(mcs, name, bases, dct)
+        if 'type_id' in dct:
+            Wrappers._wrappers[dct['type_id']] = wrapper
+        return wrapper
+
+    def set_bot_instance(bot):
+        for wrapper in Wrappers._wrappers.values():
+            wrapper._bot = bot
+
+    def __class_getitem__(cls, wrapper_key):
+        return cls._wrappers[wrapper_key]
+
+
+class BaseWrapper(object, metaclass=Wrappers):
     _instances = set()
 
     def __init__(self, tag, bot):

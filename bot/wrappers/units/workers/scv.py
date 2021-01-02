@@ -4,7 +4,7 @@ from .worker import Worker
 
 
 class Scv(Worker):
-    id = UnitTypeId.SCV
+    type_id = UnitTypeId.SCV
 
     def __init__(self, *args, **kwargs):
           super().__init__(*args, **kwargs)
