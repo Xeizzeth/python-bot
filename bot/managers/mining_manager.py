@@ -1,6 +1,6 @@
 from collections import defaultdict
 
-from loguru import logger as LOG
+from loguru import logger as log
 
 from sc2.ids.unit_typeid import UnitTypeId
 
@@ -129,7 +129,7 @@ class MiningManager(BaseManager):
         self.mineral_tags = location_mineral_tags
 
         for mineral_tag in destroyed_mineral_tags:
-            LOG.debug(
+            log.debug(
                 f"Removing {mineral_tag} "
                 + f"position: {self.minerals[mineral_tag].position} "
                 + "from MINERALS"
@@ -139,7 +139,7 @@ class MiningManager(BaseManager):
         for mineral_tag in new_mineral_tags:
             self.minerals[mineral_tag] = Mineral(tag=mineral_tag, bot=self.bot)
 
-            LOG.debug(
+            log.debug(
                 f"Added {mineral_tag} "
                 + f"position: {self.minerals[mineral_tag].position} "
                 + "to MINERALS"
@@ -155,7 +155,7 @@ class MiningManager(BaseManager):
         self.vespene_tags = location_vespene_tags
 
         for vespene_tag in destroyed_vespene_tags:
-            LOG.debug(
+            log.debug(
                 f"Removing {vespene_tag} "
                 + f"position: {self.vespenes[vespene_tag].position} "
                 + "from VESPENES"
@@ -166,7 +166,7 @@ class MiningManager(BaseManager):
         for vespene_tag in new_vespene_tags:
             self.vespenes[vespene_tag] = Vespene(tag=vespene_tag, bot=self.bot)
 
-            LOG.debug(
+            log.debug(
                 f"Added {vespene_tag} "
                 + f"position: {self.vespenes[vespene_tag].position} "
                 + "to VESPENES"

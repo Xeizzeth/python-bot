@@ -1,4 +1,4 @@
-from loguru import logger as LOG
+from loguru import logger as log
 
 from bot.managers.base_manager import BaseManager
 

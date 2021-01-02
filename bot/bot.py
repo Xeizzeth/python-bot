@@ -1,4 +1,4 @@
-from loguru import logger as LOG
+from loguru import logger as log
 
 from .base_bot import BaseBot
 from .managers import MacroManager
@@ -111,7 +111,7 @@ WarpInComplete
 
 class Bot(BaseBot):
     async def on_before_start(self):
-        LOG.info(f"init")
+        log.info(f"init")
 
     async def on_start(self):
         self.macro_manager = MacroManager(
@@ -120,38 +120,38 @@ class Bot(BaseBot):
             self.workers.tags,
             self.townhalls.tags
         )
-        LOG.info(f"the game has started")
+        log.info(f"the game has started")
         # self.managers.append(self.macro_manager)
 
     async def on_end(self, game_result):
-        LOG.info(f"the game has ended {game_result}")
+        log.info(f"the game has ended {game_result}")
 
     async def on_step(self, iteration):
         await self.update()
 
     async def on_building_construction_started(self, building):
-        LOG.info(f"the building has started {building}")
+        log.info(f"the building has started {building}")
 
     async def on_building_construction_complete(self, building):
-        LOG.info(f"the building completed {building}")
+        log.info(f"the building completed {building}")
 
     async def on_upgrade_complete(self, upgrade):
-        LOG.info(f"upgrade complete {upgrade}")
+        log.info(f"upgrade complete {upgrade}")
 
     async def on_unit_created(self, unit):
-        LOG.info(f"unit created {unit}")
+        log.info(f"unit created {unit}")
 
     async def on_unit_destroyed(self, unit_tag):
-        LOG.info(f"unit destroyed {unit_tag}")
+        log.info(f"unit destroyed {unit_tag}")
 
     async def on_unit_took_damage(self, unit, damage_amount):
-        LOG.info(f"unit got damaged {unit} {damage_amount}")
+        log.info(f"unit got damaged {unit} {damage_amount}")
 
     async def on_enemy_unit_entered_vision(self, unit):
-        LOG.info(f"unit became visible {unit}")
+        log.info(f"unit became visible {unit}")
 
     async def on_enemy_unit_left_vision(self, unit_tag):
-        LOG.info(f"unit left vision {unit_tag}")
+        log.info(f"unit left vision {unit_tag}")
 
     async def on_unit_type_changed(self, unit, previous_type):
-        LOG.info(f"unit changed type, {unit}, {previous_type}")
+        log.info(f"unit changed type, {unit}, {previous_type}")

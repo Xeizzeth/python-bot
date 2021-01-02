@@ -1,4 +1,4 @@
-from loguru import logger as LOG
+from loguru import logger as log
 
 from sc2.ids.unit_typeid import UnitTypeId
 
@@ -25,7 +25,7 @@ class MacroManager(BaseManager):
         townhall_tags=None
     ):
         super().__init__()
-        LOG.info(f"Initializing macromanager for {len(locations)} locations")
+        log.info(f"Initializing macromanager for {len(locations)} locations")
 
         self.bot = bot
         self.mining_managers = list()

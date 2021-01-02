@@ -1,0 +1,13 @@
+{
+	"folders": [
+		{
+			"path": ".."
+		},
+		{
+			"path": "..\\..\\!stuff"
+		}
+	],
+	"settings": {
+		"editor.scrollBeyondLastColumn": 0
+	}
+}

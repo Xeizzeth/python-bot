@@ -3,7 +3,7 @@ from collections import defaultdict
 from random import choice
 from importlib import reload, invalidate_caches
 
-from loguru import logger as LOG
+from loguru import logger as log
 
 import sc2
 from sc2 import Race, Difficulty
@@ -46,8 +46,8 @@ logger_filter = {
 }
 
 
-LOG.remove()
-LOG.add(sys.stdout, format=formatter, filter=logger_filter, level="DEBUG")
+log.remove()
+log.add(sys.stdout, format=formatter, filter=logger_filter, level="DEBUG")
 
 
 def main():
@@ -56,21 +56,12 @@ def main():
         Computer(Race.Terran, Difficulty.VeryHard)
     ]
 
-    gen = sc2.main._host_game_iter(
+    sc2.run_game(
         sc2.maps.get("CatalystLE_NOAI"),
         player_config,
         realtime=False,
         save_replay_as="replays/replay.SC2Replay"
     )
-
-    next(gen)
-    while True:
-        if input('Press enter to reload or type "q" to exit: ') == 'q':
-            exit()
-
-        reload(bot)
-        player_config[0].ai = bot.Bot()
-        gen.send(player_config)
 
 
 if __name__ == "__main__":
